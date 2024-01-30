@@ -4,7 +4,7 @@ const secretFile=require('../config/secretFile');
 const validateToken=async(req,res,next)=>{
 let token;
 const authHeader=req.headers.authorization || req.headers.Authorization;
-console.log(authHeader)
+
 
 if(authHeader && authHeader.startsWith('Bearer')){
     token=authHeader.split(" ")[1];

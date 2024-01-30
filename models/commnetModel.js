@@ -14,9 +14,15 @@ class Comment{
             connection.query('INSERT INTO comment (postId,userId, content) VALUES (?, ?,?)',[comment.postId,comment.userId, comment.content],(error,results)=>{
                 if(error)
                     reject(error);
-                else
-                resolve(true);}
-        )
+                else{
+                    connection.query(`SELECT * FROM comment  WHERE userId=9 ORDER BY timestamp DESC LIMIT 1;`,[comment.commentId],(err,res)=>{
+                        if(err)
+                        reject(err);
+                    else
+                        resolve(res);
+                    })   }
+                }
+            )
 
 
 

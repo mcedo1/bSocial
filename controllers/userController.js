@@ -15,8 +15,8 @@ const kafka = new Kafka({
   ssl: true,
   sasl: {
     mechanism: 'plain',
-    username: '7R7FIXK5LFGBQACU', 
-    password: 'kLPCmur53+wDkxLDxo7/hqSvdKlKyK50eDoqPrK2GeS7jugTXD1T/V8RU9avehCU' 
+    username: 'J5Z224QZSXCMZDW4', 
+    password: 'w9drey8M7aJ+OSIP/5KTceRGPFPO5yQcJ6lvhiOmeyxqdVHx3rsSTiU1Fmx9fpjZ' 
 },
 createPartitioner: Partitioners.LegacyPartitioner 
 });
@@ -93,15 +93,16 @@ try{
 
     //    console.log("New user:",newUser);
 
-       await sendUserRegistrationMessage(newUser);
        
-    User.createUser(newUser,(error,response)=>{
+       
+    User.createUser(newUser,async(error,response)=>{
         if(error){
             console.log("Error occured while creating saving user:",error);
             res.status(500).json({error:"Error occured while creating user"})
-        }else
+        }else{
+            await sendUserRegistrationMessage(newUser);
             res.status(200).send(`User has been saved successfully`);
-        
+        }
     })
 
     });
