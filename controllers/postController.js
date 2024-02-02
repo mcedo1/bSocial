@@ -141,18 +141,6 @@ const getAllPosts=async(req,res)=>{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports={createPost,
     getAllPosts,
 };

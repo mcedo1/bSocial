@@ -8,6 +8,7 @@ const { Kafka,Partitioners } = require('kafkajs');
 
 
 
+
 // Kreiramo Kafka producenta sa odgovarajućom konfiguracijom
 const kafka = new Kafka({
   clientId: 'user-service',
@@ -57,6 +58,43 @@ async function sendUserRegistrationMessage(user) {
     console.error('Error sending user registration message to Kafka:', error);
   }
 }
+//// login kafka user
+
+async function sendUserLoginMessage(user) {
+    try {
+      await producer.connect(); //povezivanje na kafka cluster
+      console.log("Uspjesno smo se povezalina klaster!")
+  
+      const topic = 'topic_login'; 
+  
+  //poruka koja se salje 
+      const message = {
+        user: user,
+        registrationDate: new Date()
+      };
+  
+      //slanje poruke u izvjesnu temu 
+      await producer.send({
+        topic:topic,
+        messages: [
+          {
+            value: JSON.stringify(message)
+          }
+        ]
+      });
+  
+      console.log('User login message sent to Kafka.');
+  
+      
+      await producer.disconnect();
+    } catch (error) {
+      console.error('Error sending user login message to Kafka:', error);
+    }
+  }
+
+
+
+
 
 
 //
@@ -137,7 +175,7 @@ const loginUser=async(req,res)=>{
             const user=result[0];
             const hashedPassword=user.password;
 
-            bcrypt.compare(password,hashedPassword,(err,isMatch)=>{
+            bcrypt.compare(password,hashedPassword,async (err,isMatch)=>{
                 if(err){
                     console.log("Doslo je do greske")
                     throw err;
@@ -156,6 +194,7 @@ const loginUser=async(req,res)=>{
                         },secretSigned,
                         {expiresIn:"55m"}
                         );
+                        await sendUserLoginMessage(user);
                         return res.status(200).send(`Successfuly signed in ${accessToken}`)}}})
 }})};
 
