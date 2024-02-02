@@ -1,12 +1,13 @@
 const connection=require('../config/dbConnection');
 const Comment = require('../models/commnetModel');
-const { Kafka,Partitioners } = require('kafkajs');
-
-
+const { Kafka,Partitioners, logLevel } = require('kafkajs');
+const { AppleBasket } = require('../singlton.cjs');
+const appleBasket = new AppleBasket();
 
 // Kreiramo Kafka producenta sa odgovarajućom konfiguracijom
 const kafka = new Kafka({
     clientId: 'user-service',
+    logLevel: logLevel.INFO,
     brokers: ['pkc-4r087.us-west2.gcp.confluent.cloud:9092'], 
     ssl: true,
     sasl: {
@@ -16,18 +17,19 @@ const kafka = new Kafka({
   },
   createPartitioner: Partitioners.LegacyPartitioner 
   });
+
   
   const producer = kafka.producer({
       createPartitioner: Partitioners.LegacyPartitioner
     });
-  
+   
   //funkc za slanje poruke Kafci
   async function sendCommentMessage(comment) {
+      const topic = 'topic_comment'; 
     try {
       await producer.connect(); //povezivanje na kafka cluster
       console.log("Uspjesno smo se povezali na klaster!")
   
-      const topic = 'topic_comment'; 
   
         const userInfo=await getUserInfo(comment.userId);
         
@@ -50,15 +52,13 @@ const kafka = new Kafka({
       });
     
       console.log('Comment information message sent to Kafka.');
-  
-      
       await producer.disconnect();
     } catch (error) {
       console.error('Error sending comment  message to Kafka:', error);
     }
-  }
-  
 
+}
+//
 
 async function getUserInfo(userId){
     return new Promise((resolve,reject)=>{
@@ -95,10 +95,7 @@ async function getUserInfo(userId){
 
 
 
-
-
-
-const createComment=async(req,res)=>{
+const createComment=async(req,res,ws)=>{
 
     const userId=req.params.userId;
     const {postId,content}=req.body;
@@ -110,8 +107,6 @@ const createComment=async(req,res)=>{
             content
         );
 
-
-
         Comment.createComment(newComment)
         .then(async response=>{
             newComment.commentId=response[0].commentId;
@@ -122,6 +117,8 @@ const createComment=async(req,res)=>{
             console.log("Error tokom cuvanja komentara:\n",err)
             return res.status(-1005).send("Error while creating comment");
         })
+
+    
          
 
 };
@@ -149,30 +146,4 @@ const getAllComments=async(req,res)=>{
 
 module.exports={createComment,
     getAllComments
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
