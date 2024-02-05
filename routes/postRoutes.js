@@ -1,5 +1,5 @@
 const express=require('express');
-const {createPost,getAllPosts, getSinglePost}= require('../controllers/postController');
+const {createPost,getAllPosts}= require('../controllers/postController');
 const validateToken = require('../middleware/validateTokenHandler');
 
 

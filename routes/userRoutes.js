@@ -3,8 +3,8 @@ const {registerUser,loginUser, currentUser} = require('../controllers/userContro
 const validateToken = require('../middleware/validateTokenHandler');
 const router=express.Router();
 
-router.post('/register',registerUser);
 
+router.post('/register',registerUser);
 router.post('/login',loginUser);
 router.get('/current/:id',validateToken,currentUser);
 
