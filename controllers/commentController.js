@@ -95,7 +95,7 @@ const getAllComments = async (req, res) => {
     const postId = req.params.postId;
 
     const sql =
-        `SELECT content, timestamp, user.username, user.userId, commentId, comment.postId ` +
+        `SELECT content, timestamp, user.username,user.photoUrl, user.userId, commentId, comment.postId ` +
         `FROM comment, user ` +
         `WHERE postId = ? AND comment.userId = user.userId`;
 

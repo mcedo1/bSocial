@@ -190,4 +190,27 @@ const currentUser = async (req, res) => {
     res.status(200).send(req.user);
 };
 
-module.exports = { registerUser, loginUser, currentUser };
+
+const updateUserPhoto=async(req,res)=>{
+    const userId=req.params.userId;
+    const photoUrl=req.file.originalname;
+    
+
+    const sql="UPDATE user SET photoUrl = ? WHERE userId=?";
+
+    connection.query(sql,[photoUrl,userId],(error,results)=>{
+        if(error){
+            console.log("Error while updating user photo:",error);
+            return res.status(400).json({message:"Failed to update user photo"})
+        }
+        console.log("User photo updated successfully!");
+        res.status(200).json({message:"User photo updated successfully!"})
+    })
+}
+
+
+
+
+
+
+module.exports = { registerUser, loginUser, currentUser,updateUserPhoto };

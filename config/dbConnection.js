@@ -1,13 +1,13 @@
-// const mysql = require("mysql");
-const mysql2 = require("mysql2");
+const mysql = require("mysql");
+// const mysql2 = require("mysql2");
 
 //For Docker-compose testing use:mysql2 where host:mysql
-const connection = mysql2.createConnection({
-    host: "mysql",
+const connection = mysql.createConnection({
+    host: "localhost",
     user: "root",
     password: "root",
     database: "bdata",
-    port: "3306",
+    port: "3307",
 });
 
 connection.connect((err) => {

@@ -40,13 +40,14 @@ const createFollow = async (req, res) => {
 const getFollowees = async (req, res) => {
     const followerId = req.params.followerId;
 
+    console.log('Ovo je reqk:',req)
     const userExists = await checkUserId(followerId);
     if (!userExists) {
         console.log(userExists);
         return res.status(400).send("User not found in database");
     }
 
-    const sql = `SELECT f.followeeId,u.username 
+    const sql = `SELECT f.followeeId,u.username,u.photoUrl  
     FROM follow f  
     JOIN user u ON f.followeeId=u.userId  WHERE f.followerId=?`;
 
@@ -68,7 +69,7 @@ const getNoFollowees = async (req, res) => {
         return res.status(400).send("User not found in database");
     }
 
-    const sql = `SELECT username,userId FROM user WHERE userId!=? and userId not in(
+    const sql = `SELECT username,userId,photoUrl FROM user WHERE userId!=? and userId not in(
         select followeeId from follow where followerId=?);`;
 
     connection.query(sql, [followerId, followerId], (error, result) => {

@@ -97,7 +97,7 @@ const createPost = async (req, res) => {
 const getAllPosts = async (req, res) => {
     const userId = req.params.userId;
 
-    const sql = `SELECT p.postId,p.content, p.userId,p.timestamp, usr.username
+    const sql = `SELECT p.postId,p.content, p.userId,p.timestamp, usr.username,usr.photoUrl
     FROM post p, user usr
     WHERE usr.userId=p.userId and (p.userId = ? OR p.userId IN (
         SELECT f.followeeId

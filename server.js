@@ -6,6 +6,13 @@ const wss = new WebSocket.Server({ port: 8080 });
 const cors = require("cors");
 const connection = require("./config/dbConnection");
 
+
+
+
+
+
+
+
 const kafka = new Kafka({
     clientId: "user-service",
     logLevel: logLevel.NOTHING,
@@ -39,6 +46,10 @@ app.use((req, res, next) => {
 app.use(cors());
 const port = process.env.PORT || 3000;
 
+
+app.use('/static', express.static('C:/Users/milos/OneDrive/Desktop/bSocial/backend/src/pictures'));
+
+
 app.use(express.json());
 
 app.use("/api/users", require("./routes/userRoutes"));
@@ -50,48 +61,48 @@ app.listen(port, () => {
     console.log("Server listening on port ", port);
 });
 
-async function runKafkaConsumer() {
-    try {
-        await consumer.connect();
-        await consumer.subscribe({
-            topics: ["topic_comment"],
-            fromBeginning: true,
-        });
-        console.log("Connected to Kafka");
-        await consumer.run({
-            eachMessage: async ({ topic, partition, message }) => {
-                try {
+// async function runKafkaConsumer() {
+//     try {
+//         await consumer.connect();
+//         await consumer.subscribe({
+//             topics: ["topic_comment"],
+//             fromBeginning: true,
+//         });
+//         console.log("Connected to Kafka");
+//         await consumer.run({
+//             eachMessage: async ({ topic, partition, message }) => {
+//                 try {
                     
-                    const parsedMessage = JSON.parse(
-                        message.value.toString("utf8")
-                        );
+//                     const parsedMessage = JSON.parse(
+//                         message.value.toString("utf8")
+//                         );
                     
-                    const  postId=parsedMessage.postId;
+//                     const  postId=parsedMessage.postId;
                      
-                    const userInfo=await getUserInfoPostId(postId);
-                    userInfo.commenter=parsedMessage.senderUsername;
-                    userInfo.commentContent=parsedMessage.commentContent;
+//                     const userInfo=await getUserInfoPostId(postId);
+//                     userInfo.commenter=parsedMessage.senderUsername;
+//                     userInfo.commentContent=parsedMessage.commentContent;
                     
                     
                     
-                    const userInfoJson=JSON.stringify(userInfo);
+//                     const userInfoJson=JSON.stringify(userInfo);
                     
-                    arr.forEach((ws) =>
-                        ws.send(userInfoJson)
-                    );
+//                     arr.forEach((ws) =>
+//                         ws.send(userInfoJson)
+//                     );
 
-                    console.log("Received message:", parsedMessage);
-                } catch (error) {
-                    console.log(error);
-                }
-            },
-        });
-    } catch (err) {
-        console.error("Error connecting to Kafka:", error);
-    }
-}
+//                     console.log("Received message:", parsedMessage);
+//                 } catch (error) {
+//                     console.log(error);
+//                 }
+//             },
+//         });
+//     } catch (err) {
+//         console.error("Error connecting to Kafka:", error);
+//     }
+// }
 
-runKafkaConsumer();
+// runKafkaConsumer();
 
 
 
