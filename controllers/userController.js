@@ -187,7 +187,23 @@ const loginUser = async (req, res) => {
 };
 
 const currentUser = async (req, res) => {
-    res.status(200).send(req.user);
+    
+    const userId=req.params.userId;
+
+
+    const sql="SELECT u.userId,u.firstName,u.lastName,u.city,u.age,p.content FROM user u JOIN post  p on u.userId=p.userId WHERE u.userId=?";
+  
+    connection.query(sql,[userId],(err,data)=>{
+        if(err){
+            console.log('An error occured',err)
+            return res.status(400).json({message:"An erro occured while fetching curreng user"});
+        }
+        console.log('User info fetched successfully')
+        res.status(200).json(data);
+
+    })
+  
+    
 };
 
 

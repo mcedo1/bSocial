@@ -24,7 +24,7 @@ const upload=multer({
 router.post('/register',registerUser);
 router.post('/register/photo/:userId',upload.single('photo'),updateUserPhoto)
 router.post('/login',loginUser);
-router.get('/current/:id',validateToken,currentUser);
+router.get('/:userId',validateToken,currentUser);
 
 
 module.exports=router;
