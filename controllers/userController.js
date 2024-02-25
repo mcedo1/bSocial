@@ -191,7 +191,7 @@ const currentUser = async (req, res) => {
     const userId=req.params.userId;
 
 
-    const sql="SELECT u.userId,u.firstName,u.lastName,u.city,u.age,p.content FROM user u JOIN post  p on u.userId=p.userId WHERE u.userId=?";
+    const sql="SELECT u.username,u.firstName,u.lastName,u.city,u.age,p.content,u.photoUrl FROM user u JOIN post  p on u.userId=p.userId WHERE u.userId=?";
   
     connection.query(sql,[userId],(err,data)=>{
         if(err){
