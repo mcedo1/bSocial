@@ -207,6 +207,9 @@ const currentUser = async (req, res) => {
 };
 
 
+
+
+
 const updateUserPhoto=async(req,res)=>{
     const userId=req.params.userId;
     const photoUrl=req.file.originalname;
@@ -223,6 +226,10 @@ const updateUserPhoto=async(req,res)=>{
         res.status(200).json({message:"User photo updated successfully!"})
     })
 }
+
+
+
+
 
 
 
