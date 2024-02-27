@@ -8,7 +8,7 @@ class User {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.photoUrl = photoUrl;
+    
     }
 
     static createUser(user, callback) {

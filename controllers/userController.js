@@ -128,6 +128,7 @@ const registerUser = async (req, res) => {
                     });
                 } else {
                     await sendUserRegistrationMessage(newUser);
+                    console.log("User registred successfully")
                     res.status(200).json({
                         message: "User successfully registrated!",
                     });
