@@ -27,7 +27,6 @@ router.put('/register/photo/:userId',upload.single('photo'),updateUserPhoto)
 router.post('/login',loginUser);
 router.get('/:userId',validateToken,currentUser);
 
-
 module.exports=router;
 
 
