@@ -130,7 +130,8 @@ const registerUser = async (req, res) => {
                     await sendUserRegistrationMessage(newUser);
                     console.log("User registred successfully")
                     res.status(200).json({
-                        message: "User successfully registrated!",
+                        status:200,
+                        message: "User successfully registrated!"
                     });
                 }
             });
@@ -148,7 +149,9 @@ const loginUser = async (req, res) => {
     connection.query(sql, [identity, identity], (error, result) => {
         if (error) return res.status(400).send("An  error occured");
         if (result.length === 0)
-            return res.status(400).json({ message: "User not found" });
+            return res.status(400).json({ 
+                status:400,
+                message: "User not found" });
 
         const user = result[0];
 
@@ -161,7 +164,9 @@ const loginUser = async (req, res) => {
                 if (!isMatch) {
                     return res
                         .status(401)
-                        .json({ message: "The password is not correct" });
+                        .json({
+                            status:401,
+                            message: "The password is not correct" });
                 } else {
                     const accessToken = jwt.sign(
                         {
@@ -179,6 +184,7 @@ const loginUser = async (req, res) => {
                         key: accessToken,
                         userId: user.userId,
                         email: user.email,
+                        status:200
                     };
                     return res.status(200).json(sendData);
                 }
